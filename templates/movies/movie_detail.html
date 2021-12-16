@@ -31,7 +31,11 @@
                     </li>
                     <li style="list-style: none">
                         <span><b>:</b>
-                            
+                            {% for actor in movie.directors.all %}
+                            <a href="{{ actor.get_absolute_url }}">
+                                {{ actor.name }}
+                            </a>
+                            {% endfor %}
                         </span>
                     </li>
                     <li style="list-style: none"><span><b>:</b>
@@ -109,7 +113,7 @@
             <p>
                 {% for image in movie.movieshots_set.all %}
                     <img src="{{ image.image.url }}" class="img-movie-shots "
-                         alt="{{ image.description }}">
+                         alt="{{ image.description|safe }}">
                 {% endfor %}
             </p>
             <p class="editContent">
@@ -166,7 +170,7 @@
                         {{ review.name }}
                     </h5>
                     <p class="mt-2 editContent">
-                        {{ review.text }}
+                        {{ review.text|safe }}
                     </p>
                     <a href="#formReview"
                        onclick="addReview('{{ review.name }}', '{{ review.id }}')">Ответить</a>
@@ -178,7 +182,7 @@
                             </a>
                             <div class="media-body">
                                 <h5 class="mt-0 editContent">{{ rew.name }}</h5>
-                                <p class="mt-2 editContent">{{ rew.text }}</p>
+                                <p class="mt-2 editContent">{{ rew.text|safe }}</p>
                             </div>
                         </div>
                     {% endfor %}

@@ -1,4 +1,4 @@
-
+{% load movie_tag %}
 <header class="header">
     <div class="container-fluid px-lg-5">
         <!-- nav -->
@@ -21,7 +21,11 @@
                                                 aria-hidden="true"></span></a>
                     <input type="checkbox" id="drop-2">
                     <ul>
-                       
+                        {% get_categories as categories %}
+                        {% for category in categories %}
+                            <li><a href="/">{{ category.name }}</a></li>   
+                        {% endfor %}
+                    </ul>
                 </li>
                 <li>
                     {% if user.is_authenticated %}

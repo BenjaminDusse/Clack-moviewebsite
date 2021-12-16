@@ -2,7 +2,7 @@
 * Youtube Embed Plugin
 *
 * @author Jonnas Fonini <jonnasfonini@gmail.com>
-* @version 2.1.14
+* @version 2.1.18
 */
 (function () {
 	CKEDITOR.plugins.add('youtube', {
@@ -22,6 +22,33 @@
 			CKEDITOR.dialog.add('youtube', function (instance) {
 				var video,
 					disabled = editor.config.youtube_disabled_fields || [];
+
+				function handleLinkChange(el, api) {
+					var video = ytVidId(el.getValue());
+					var time = ytVidTime(el.getValue());
+
+					if (el.getValue().length > 0) {
+						el.getDialog().getContentElement('youtubePlugin', 'txtEmbed').disable();
+					}
+					else if (!disabled.length || !disabled.includes('txtEmbed')) {
+						el.getDialog().getContentElement('youtubePlugin', 'txtEmbed').enable();
+					}
+
+					if (video && time) {
+						var seconds = timeParamToSeconds(time);
+						var hms = secondsToHms(seconds);
+						el.getDialog().getContentElement('youtubePlugin', 'txtStartAt').setValue(hms);
+					}
+				}
+
+				function handleEmbedChange(el, api) {
+					if (el.getValue().length > 0) {
+						el.getDialog().getContentElement('youtubePlugin', 'txtUrl').disable();
+					}
+					else {
+						el.getDialog().getContentElement('youtubePlugin', 'txtUrl').enable();
+					}
+				}
 
 				return {
 					title : editor.lang.youtube.title,
@@ -106,9 +133,9 @@
 											'default' : editor.config.youtube_width != null ? editor.config.youtube_width : '640',
 											validate : function () {
 												if (this.getValue()) {
-													var width = parseInt (this.getValue()) || 0;
+													var width = Number(this.getValue());
 
-													if (width === 0) {
+													if (isNaN(width)) {
 														alert(editor.lang.youtube.invalidWidth);
 														return false;
 													}
@@ -127,9 +154,9 @@
 											'default' : editor.config.youtube_height != null ? editor.config.youtube_height : '360',
 											validate : function () {
 												if (this.getValue()) {
-													var height = parseInt(this.getValue()) || 0;
+													var height = Number(this.getValue());
 
-													if (height === 0) {
+													if (isNaN(height)) {
 														alert(editor.lang.youtube.invalidHeight);
 														return false;
 													}
@@ -328,34 +355,6 @@
 	});
 })();
 
-function handleLinkChange(el, api) {
-	var video = ytVidId(el.getValue());
-	var time = ytVidTime(el.getValue());
-
-	if (el.getValue().length > 0) {
-		el.getDialog().getContentElement('youtubePlugin', 'txtEmbed').disable();
-	}
-	else if (!disabled.length || !disabled.includes('txtEmbed')) {
-		el.getDialog().getContentElement('youtubePlugin', 'txtEmbed').enable();
-	}
-
-	if (video && time) {
-		var seconds = timeParamToSeconds(time);
-		var hms = secondsToHms(seconds);
-		el.getDialog().getContentElement('youtubePlugin', 'txtStartAt').setValue(hms);
-	}
-}
-
-function handleEmbedChange(el, api) {
-	if (el.getValue().length > 0) {
-		el.getDialog().getContentElement('youtubePlugin', 'txtUrl').disable();
-	}
-	else {
-		el.getDialog().getContentElement('youtubePlugin', 'txtUrl').enable();
-	}
-}
-
-
 /**
  * JavaScript function to match (and return) the video Id
  * of any valid Youtube Url, given as input string.
@@ -363,7 +362,7 @@ function handleEmbedChange(el, api) {
  * @url: http://stackoverflow.com/a/10315969/624466
  */
 function ytVidId(url) {
-	var p = /^(?:https?:\/\/)?(?:www\.)?(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))((\w|-){11})(?:\S+)?$/;
+	var p = /^(?:https?:\/\/)?(?:(?:www|m).)?(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))((\w|-){11})(?:\S+)?$/;
 	return (url.match(p)) ? RegExp.$1 : false;
 }
 
