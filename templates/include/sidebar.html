@@ -1,7 +1,7 @@
 {% load movie_tag %}
 <div class="search-bar w3layouts-newsletter">
     <h3 class="sear-head editContent">Поиск фильма</h3>
-    <form action="" method="get" class="d-flex editContent">
+    <form action="{% url 'search' %}" method="get" class="d-flex editContent">
         <input type="search" placeholder="Введите название..." name="q" class="form-control" required="">
         <button type="submit" class="btn1 btn">
             <span class="fa fa-search" aria-hidden="true"></span>
@@ -24,7 +24,7 @@
     <!-- // preference -->
     <!-- discounts -->
     <div class="left-side">
-        <h3 class="sear-head editContent">Год</h3   >
+        <h3 class="sear-head editContent">Год</h3>
         <ul class="w3layouts-box-list">
             {% for movie in view.get_years %}
             <li class="editContent">
