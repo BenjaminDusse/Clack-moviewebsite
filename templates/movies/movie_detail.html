@@ -127,7 +127,7 @@
                 <div class="contact-single">
                     <h3 class="editContent">
                         <span class="sub-tittle editContent">{{ movie.reviews_set.count }}</span>
-                        
+                        {% trans 'Оставить отзыв ' %}
                     </h3>
                     <form action="{% url 'add_review' movie.id %}" method="post" class="mt-4"
                           id="formReview">
@@ -152,6 +152,7 @@
                                 </label>
                                 {{ form.email }}
                             </div>
+                            {{ form.captcha }}
                         </div>
                         <button type="submit"
                                 class="mt-3 btn btn-success btn-block py-3">

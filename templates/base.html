@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-{% load static %}
+{% load static recaptcha3 %}
 <html lang="ru">
 <head>
     <!-- //Meta tag Keywords -->
@@ -23,7 +23,8 @@
           rel="stylesheet">
     <!-- //Fonts -->
 
-    
+    {% recaptcha_init %}
+    {% recaptcha_ready action_name="homepage" %}
 </head>
 <body>
 <div id="page" class="page">
