@@ -63,8 +63,8 @@
                         <span><b>:</b> ${{ movie.fess_in_world }}</span>
                     </li>
                     <li>
-                        <form action="" method="post" name="rating">
-                            <b>:</b>
+                        <form action="{% url 'add_rating' %}" method="post" name="rating">
+                            <b>Рейтинг:</b>
                             {% csrf_token %}
                             <input type="hidden" value="{{ movie.id }}" name="movie">
                             <span class="rating">
